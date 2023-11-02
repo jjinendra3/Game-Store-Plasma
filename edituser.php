@@ -16,20 +16,20 @@ $servername = "localhost";
 $username = "root";
 $password = "";
 
-$conn = new mysqli($servername, $username, $password); 
+$conn = mysqli_connect("localhost:3306", "root","","GameStore");  
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
-$sql = "USE bookstore";
-$conn->query($sql);
+$sql = "USE GameStore";
+mysqli_query($conn,$sql)
 
 $sql = "SELECT users.UserName, users.Password, customer.CustomerName, customer.CustomerIC, customer.CustomerEmail, customer.CustomerPhone, customer.CustomerGender, customer.CustomerAddress
 	FROM users, customer
 	WHERE users.UserID = customer.UserID AND users.UserID = ".$_SESSION['id']."";
-$result = $conn->query($sql);
-while($row = $result->fetch_assoc()){
+$result = mysqli_query($conn,$sql)
+while($row = mysqli_fetch_array($result)){
 	$oUserName = $row['UserName'];
 	$oPassword = $row['Password'];
 	$oName = $row['CustomerName'];
@@ -105,23 +105,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 													$username = "root";
 													$password = "";
 
-													$conn = new mysqli($servername, $username, $password); 
+													$conn = mysqli_connect("localhost:3306", "root","","GameStore");  
 
 													if ($conn->connect_error) {
 													    die("Connection failed: " . $conn->connect_error);
 													} 
 
-													$sql = "USE bookstore";
-													$conn->query($sql);
+													$sql = "USE GameStore";
+													mysqli_query($conn,$sql)
 
 													$sql = "UPDATE users SET UserName = '".$uname."', Password = '".$upassword."' WHERE UserID = "
 													.$_SESSION['id']."";
-													$conn->query($sql);
+													mysqli_query($conn,$sql)
 
 													$sql = "UPDATE customer SET CustomerName = '".$name."', CustomerPhone = '".$contact."', 
 													CustomerIC = '".$ic."', CustomerEmail = '".$email."', CustomerAddress = '".$address."', 
 													CustomerGender = '".$gender."'";
-													$conn->query($sql);
+													mysqli_query($conn,$sql)
 
 													header("Location:index.php");
 												}
@@ -149,7 +149,7 @@ function test_input($data){
 <body>
 <header>
 <blockquote>
-	<a href="index.php"><img src="image/logo.png"></a>
+	<a href="index.php"><img src="image/logo.png" height="50" width="50"></a>
 </blockquote>
 </header>
 <blockquote>

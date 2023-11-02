@@ -2,7 +2,7 @@
 <body style="font-family:Arial; margin: 0 auto; background-color: #f2f2f2;">
 <header>
 <blockquote>
-	<img src="image/logo.png">
+	<img src="image/logo.png" height="50" width="50">
 	<input class="hi" style="float: right; margin: 2%;" type="button" name="cancel" value="Home" onClick="window.location='index.php';" />
 </blockquote>
 </header>
@@ -14,39 +14,39 @@ if(isset($_SESSION['id'])){
 	$username = "root";
 	$password = "";
 
-	$conn = new mysqli($servername, $username, $password); 
+	$conn = mysqli_connect("localhost:3306", "root","","GameStore");  
 
 	if ($conn->connect_error) {
 	    die("Connection failed: " . $conn->connect_error);
 	} 
 
-	$sql = "USE bookstore";
-	$conn->query($sql);
+	$sql = "USE GameStore";
+	mysqli_query($conn,$sql)
 
 	$sql = "SELECT CustomerID from customer WHERE UserID = ".$_SESSION['id']."";
-	$result = $conn->query($sql);
-	while($row = $result->fetch_assoc()){
+	$result = mysqli_query($conn,$sql)
+	while($row = mysqli_fetch_array($result)){
 		$cID = $row['CustomerID'];
 	}
 
 	$sql = "UPDATE cart SET CustomerID = ".$cID." WHERE 1";
-	$conn->query($sql);
+	mysqli_query($conn,$sql)
 
 	$sql = "SELECT * FROM cart";
-	$result = $conn->query($sql);
-	while($row = $result->fetch_assoc()){
+	$result = mysqli_query($conn,$sql)
+	while($row = mysqli_fetch_array($result)){
 		$sql = "INSERT INTO `order`(CustomerID, BookID, DatePurchase, Quantity, TotalPrice, Status) 
 		VALUES(".$row['CustomerID'].", '".$row['BookID']
 		."', CURRENT_TIME, ".$row['Quantity'].", ".$row['TotalPrice'].", 'N')";
-		$conn->query($sql);
+		mysqli_query($conn,$sql)
 	}
 	$sql = "DELETE FROM cart";
-	$conn->query($sql);
+	mysqli_query($conn,$sql)
 
 	$sql = "SELECT customer.CustomerName, customer.CustomerIC, customer.CustomerGender, customer.CustomerAddress, customer.CustomerEmail, customer.CustomerPhone, book.BookTitle, book.Price, book.Image, `order`.`DatePurchase`, `order`.`Quantity`, `order`.`TotalPrice`
 		FROM customer, book, `order`
 		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`BookID` = book.BookID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$cID."";
-	$result = $conn->query($sql);
+	$result = mysqli_query($conn,$sql)
 	echo '<div class="container">';
 	echo '<blockquote>';
 ?>
@@ -56,7 +56,7 @@ if(isset($_SESSION['id'])){
 	echo "<table style='width:100%'>";
 	echo "<tr><th>Order Summary</th>";
 	echo "<th></th></tr>";
-	$row = $result->fetch_assoc();
+	$row = mysqli_fetch_array($result);
 	echo "<tr><td>Name: </td><td>".$row['CustomerName']."</td></tr>";
 	echo "<tr><td>No.Number: </td><td>".$row['CustomerIC']."</td></tr>";
 	echo "<tr><td>E-mail: </td><td>".$row['CustomerEmail']."</td></tr>";
@@ -69,9 +69,9 @@ if(isset($_SESSION['id'])){
 	$sql = "SELECT customer.CustomerName, customer.CustomerIC, customer.CustomerGender, customer.CustomerAddress, customer.CustomerEmail, customer.CustomerPhone, book.BookTitle, book.Price, book.Image, `order`.`DatePurchase`, `order`.`Quantity`, `order`.`TotalPrice`
 		FROM customer, book, `order`
 		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`BookID` = book.BookID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$cID."";
-	$result = $conn->query($sql);
+	$result = mysqli_query($conn,$sql)
 	$total = 0;
-	while($row = $result->fetch_assoc()){
+	while($row = mysqli_fetch_array($result)){
 		echo "<tr><td style='border-top: 2px solid #ccc;'>";
 		echo '<img src="'.$row["Image"].'"width="20%"></td><td style="border-top: 2px solid #ccc;">';
     	echo $row['BookTitle']."<br>RM".$row['Price']."<br>";
@@ -84,7 +84,7 @@ if(isset($_SESSION['id'])){
 	echo "</div>";
 
 	$sql = "UPDATE `order` SET Status = 'y' WHERE CustomerID = ".$cID."";
-	$conn->query($sql);
+	mysqli_query($conn,$sql)
 }
 
 $nameErr = $emailErr = $genderErr = $addressErr = $icErr = $contactErr = "";
@@ -139,38 +139,38 @@ if(isset($_POST['submitButton'])){
 											$username = "root";
 											$password = "";
 
-											$conn = new mysqli($servername, $username, $password); 
+											$conn = mysqli_connect("localhost:3306", "root","","GameStore");  
 
 											if ($conn->connect_error) {
 											    die("Connection failed: " . $conn->connect_error);
 											} 
 
-											$sql = "USE bookstore";
-											$conn->query($sql);
+											$sql = "USE GameStore";
+											mysqli_query($conn,$sql)
 
 											$sql = "INSERT INTO customer(CustomerName, CustomerPhone, CustomerIC, CustomerEmail, CustomerAddress, CustomerGender) 
 											VALUES('".$name."', '".$contact."', '".$ic."', '".$email."', '".$address."', '".$gender."')";
-											$conn->query($sql);
+											mysqli_query($conn,$sql)
  
 											$sql = "SELECT CustomerID from customer WHERE CustomerName = '".$name."' AND CustomerIC = '".$ic."'";
-											$result = $conn->query($sql);
-											while($row = $result->fetch_assoc()){
+											$result = mysqli_query($conn,$sql)
+											while($row = mysqli_fetch_array($result)){
 												$cID = $row['CustomerID'];
 											}
 
 											$sql = "UPDATE cart SET CustomerID = ".$cID." WHERE 1";
-											$conn->query($sql);
+											mysqli_query($conn,$sql)
 
 											$sql = "SELECT * FROM cart";
-											$result = $conn->query($sql);
-											while($row = $result->fetch_assoc()){
+											$result = mysqli_query($conn,$sql)
+											while($row = mysqli_fetch_array($result)){
 												$sql = "INSERT INTO `order`(CustomerID, BookID, DatePurchase, Quantity, TotalPrice, Status) 
 												VALUES(".$row['CustomerID'].", '".$row['BookID']
 												."', CURRENT_TIME, ".$row['Quantity'].", ".$row['TotalPrice'].", 'N')";
-												$conn->query($sql);
+												mysqli_query($conn,$sql)
 											}
 											$sql = "DELETE FROM cart";
-											$conn->query($sql);
+											mysqli_query($conn,$sql)
 										}
 									}
 								}
@@ -309,24 +309,24 @@ if(isset($_POST['submitButton'])){
 	$username = "root";
 	$password = "";
 
-	$conn = new mysqli($servername, $username, $password); 
+	$conn = mysqli_connect("localhost:3306", "root","","GameStore");  
 
 	if ($conn->connect_error) {
 	    die("Connection failed: " . $conn->connect_error);
 	} 
 
-	$sql = "USE bookstore";
-	$conn->query($sql);
+	$sql = "USE GameStore";
+	mysqli_query($conn,$sql)
 
 	$sql = "SELECT customer.CustomerName, customer.CustomerIC, customer.CustomerGender, customer.CustomerAddress, customer.CustomerEmail, customer.CustomerPhone, book.BookTitle, book.Price, book.Image, `order`.`DatePurchase`, `order`.`Quantity`, `order`.`TotalPrice`
 		FROM customer, book, `order`
 		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`BookID` = book.BookID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$cID."";
-	$result = $conn->query($sql);
+	$result = mysqli_query($conn,$sql)
 
 	echo '<table style="width: 40%">';
 	echo "<tr><th>Order Summary</th>";
 	echo "<th></th></tr>";
-	$row = $result->fetch_assoc();
+	$row = mysqli_fetch_array($result);
 	echo "<tr><td>Name: </td><td>".$row['CustomerName']."</td></tr>";
 	echo "<tr><td>No.Number: </td><td>".$row['CustomerIC']."</td></tr>";
 	echo "<tr><td>E-mail: </td><td>".$row['CustomerEmail']."</td></tr>";
@@ -338,9 +338,9 @@ if(isset($_POST['submitButton'])){
 	$sql = "SELECT customer.CustomerName, customer.CustomerIC, customer.CustomerGender, customer.CustomerAddress, customer.CustomerEmail, customer.CustomerPhone, book.BookTitle, book.Price, book.Image, `order`.`DatePurchase`, `order`.`Quantity`, `order`.`TotalPrice`
 		FROM customer, book, `order`
 		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`BookID` = book.BookID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$cID."";
-	$result = $conn->query($sql);
+	$result = mysqli_query($conn,$sql)
 	$total = 0;
-	while($row = $result->fetch_assoc()){
+	while($row = mysqli_fetch_array($result)){
 		echo "<tr><td style='border-top: 2px solid #ccc;'>";
 		echo '<img src="'.$row["Image"].'"width="20%"></td><td style="border-top: 2px solid #ccc;">';
     	echo $row['BookTitle']."<br>RM".$row['Price']."<br>";
@@ -352,7 +352,7 @@ if(isset($_POST['submitButton'])){
 	echo "</table>";
 
 	$sql = "UPDATE `order` SET Status = 'y' WHERE CustomerID = ".$cID."";
-	$conn->query($sql);
+	mysqli_query($conn,$sql)
 }
 ?>
 </blockquote>

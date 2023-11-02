@@ -10,26 +10,26 @@ session_start();
 		$username = "root";
 		$password = "";
 
-		$conn = new mysqli($servername, $username, $password);
+		$conn = mysqli_connect("localhost:3306", "root", "","GameStore");
 
 		if ($conn->connect_error) {
 		    die("Connection failed: " . $conn->connect_error);
 		} 
 
-		$sql = "USE bookstore";
-		$conn->query($sql);
+		$sql = "USE GameStore";
+		mysqli_query($conn,$sql)
 
 		$sql = "SELECT * FROM book WHERE BookID = '".$_POST['ac']."'";
-		$result = $conn->query($sql);
+		$result = mysqli_query($conn,$sql)
 
-		while($row = $result->fetch_assoc()){
+		while($row = mysqli_fetch_array($result)){
 			$bookID = $row['BookID'];
 			$quantity = $_POST['quantity'];
 			$price = $row['Price'];
 		}
 
 		$sql = "INSERT INTO cart(BookID, Quantity, Price, TotalPrice) VALUES('".$bookID."', ".$quantity.", ".$price.", Price * Quantity)";
-		$conn->query($sql);
+		mysqli_query($conn,$sql)
 	}
 
 	if(isset($_POST['delc'])){
@@ -37,41 +37,41 @@ session_start();
 		$username = "root";
 		$password = "";
 
-		$conn = new mysqli($servername, $username, $password);
+		$conn = mysqli_connect("localhost:3306", "root", "","GameStore");
 
 		if ($conn->connect_error) {
 		    die("Connection failed: " . $conn->connect_error);
 		} 
 
-		$sql = "USE bookstore";
-		$conn->query($sql);
+		$sql = "USE GameStore";
+		mysqli_query($conn,$sql)
 
 		$sql = "DELETE FROM cart";
-		$conn->query($sql);
+		mysqli_query($conn,$sql)
 	}
 
 	$servername = "localhost";
 	$username = "root";
 	$password = "";
 
-	$conn = new mysqli($servername, $username, $password);
+	$conn = mysqli_connect("localhost:3306", "root", "","GameStore");
 
 	if ($conn->connect_error) {
 	    die("Connection failed: " . $conn->connect_error);
 	} 
 
-	$sql = "USE bookstore";
-	$conn->query($sql);	
+	$sql = "USE GameStore";
+	mysqli_query($conn,$sql)	
 
 	$sql = "SELECT * FROM book";
-	$result = $conn->query($sql);
+	$result = mysqli_query($conn,$sql)
 ?>	
 
 <?php
 if(isset($_SESSION['id'])){
 	echo '<header>';
 	echo '<blockquote>';
-	echo '<a href="index.php"><img src="image/logo.png"></a>';
+	echo '<a href="index.php"><img src="image/logo.png" height="50" width="50"></a>';
 	echo '<form class="hf" action="logout.php"><input class="hi" type="submit" name="submitButton" value="Logout"></form>';
 	echo '<form class="hf" action="edituser.php"><input class="hi" type="submit" name="submitButton" value="Edit Profile"></form>';
 	echo '</blockquote>';
@@ -81,7 +81,7 @@ if(isset($_SESSION['id'])){
 if(!isset($_SESSION['id'])){
 	echo '<header>';
 	echo '<blockquote>';
-	echo '<a href="index.php"><img src="image/logo.png"></a>';
+	echo '<a href="index.php"><img src="image/logo.png" height="50" width="50"></a>';
 	echo '<form class="hf" action="Register.php"><input class="hi" type="submit" name="submitButton" value="Register"></form>';
 	echo '<form class="hf" action="login.php"><input class="hi" type="submit" name="submitButton" value="Login"></form>';
 	echo '</blockquote>';
@@ -90,7 +90,7 @@ if(!isset($_SESSION['id'])){
 echo '<blockquote>';
 	echo "<table id='myTable' style='width:80%; float:left'>";
 	echo "<tr>";
-    while($row = $result->fetch_assoc()) {
+    while($row = mysqli_fetch_array($result)) {
 	    echo "<td>";
 	    echo "<table>";
 	   	echo '<tr><td>'.'<img src="'.$row["Image"].'"width="80%">'.'</td></tr><tr><td style="padding: 5px;">Title: '.$row["BookTitle"].'</td></tr><tr><td style="padding: 5px;">ISBN: '.$row["ISBN"].'</td></tr><tr><td style="padding: 5px;">Author: '.$row["Author"].'</td></tr><tr><td style="padding: 5px;">Type: '.$row["Type"].'</td></tr><tr><td style="padding: 5px;">RM'.$row["Price"].'</td></tr><tr><td style="padding: 5px;">
@@ -106,12 +106,12 @@ echo '<blockquote>';
     echo "</table>";
 
 	$sql = "SELECT book.BookTitle, book.Image, cart.Price, cart.Quantity, cart.TotalPrice FROM book,cart WHERE book.BookID = cart.BookID;";
-	$result = $conn->query($sql);
+	$result = mysqli_query($conn,$sql)
 
     echo "<table style='width:20%; float:right;'>";
     echo "<th style='text-align:left;'><i class='fa fa-shopping-cart' style='font-size:24px'></i> Cart <form style='float:right;' action='' method='post'><input type='hidden' name='delc'/><input class='cbtn' type='submit' value='Empty Cart'></form></th>";
     $total = 0;
-    while($row = $result->fetch_assoc()){
+    while($row = mysqli_fetch_array($result)){
     	echo "<tr><td>";
     	echo '<img src="'.$row["Image"].'"width="20%"><br>';
     	echo $row['BookTitle']."<br>RM".$row['Price']."<br>";

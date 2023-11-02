@@ -69,27 +69,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 													$username = "root";
 													$password = "";
 
-													$conn = new mysqli($servername, $username, $password); 
+													$conn = mysqli_connect("localhost:3306", "root","","GameStore");  
 
 													if ($conn->connect_error) {
 													    die("Connection failed: " . $conn->connect_error);
 													} 
 
-													$sql = "USE bookstore";
-													$conn->query($sql);
+													$sql = "USE GameStore";
+													mysqli_query($conn,$sql)
 
 													$sql = "INSERT INTO users(UserName, Password) VALUES('".$uname."', '".$upassword."')";
-													$conn->query($sql);
+													mysqli_query($conn,$sql)
 
 													$sql = "SELECT UserID FROM users WHERE UserName = '".$uname."'";
-													$result = $conn->query($sql);
-													while($row = $result->fetch_assoc()){
+													$result = mysqli_query($conn,$sql)
+													while($row = mysqli_fetch_array($result)){
 														$id = $row['UserID'];
 													}
 
 													$sql = "INSERT INTO customer(CustomerName, CustomerPhone, CustomerIC, CustomerEmail, CustomerAddress, CustomerGender, UserID) 
 													VALUES('".$name."', '".$contact."', '".$ic."', '".$email."', '".$address."', '".$gender."', ".$id.")";
-													$conn->query($sql);
+													mysqli_query($conn,$sql)
 
 													header("Location:index.php");
 												}
@@ -117,7 +117,7 @@ function test_input($data){
 <body>
 <header>
 <blockquote>
-	<a href="index.php"><img src="image/logo.png"></a>
+	<a href="index.php"><img src="image/logo.png" height="50" width="50"></a>
 </blockquote>
 </header>
 <blockquote>
