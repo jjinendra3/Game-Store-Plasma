@@ -35,8 +35,8 @@ if(isset($_SESSION['id'])){
 	$sql = "SELECT * FROM cart";
 	$result = mysqli_query($conn,$sql)
 	while($row = mysqli_fetch_array($result)){
-		$sql = "INSERT INTO `order`(CustomerID, BookID, DatePurchase, Quantity, TotalPrice, Status) 
-		VALUES(".$row['CustomerID'].", '".$row['BookID']
+		$sql = "INSERT INTO `order`(CustomerID, GameID, DatePurchase, Quantity, TotalPrice, Status) 
+		VALUES(".$row['CustomerID'].", '".$row['GameID']
 		."', CURRENT_TIME, ".$row['Quantity'].", ".$row['TotalPrice'].", 'N')";
 		mysqli_query($conn,$sql)
 	}
@@ -45,7 +45,7 @@ if(isset($_SESSION['id'])){
 
 	$sql = "SELECT customer.CustomerName, customer.CustomerIC, customer.CustomerGender, customer.CustomerAddress, customer.CustomerEmail, customer.CustomerPhone, book.BookTitle, book.Price, book.Image, `order`.`DatePurchase`, `order`.`Quantity`, `order`.`TotalPrice`
 		FROM customer, book, `order`
-		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`BookID` = book.BookID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$cID."";
+		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`GameID` = book.GameID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$cID."";
 	$result = mysqli_query($conn,$sql)
 	echo '<div class="container">';
 	echo '<blockquote>';
@@ -68,7 +68,7 @@ if(isset($_SESSION['id'])){
 
 	$sql = "SELECT customer.CustomerName, customer.CustomerIC, customer.CustomerGender, customer.CustomerAddress, customer.CustomerEmail, customer.CustomerPhone, book.BookTitle, book.Price, book.Image, `order`.`DatePurchase`, `order`.`Quantity`, `order`.`TotalPrice`
 		FROM customer, book, `order`
-		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`BookID` = book.BookID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$cID."";
+		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`GameID` = book.GameID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$cID."";
 	$result = mysqli_query($conn,$sql)
 	$total = 0;
 	while($row = mysqli_fetch_array($result)){
@@ -164,8 +164,8 @@ if(isset($_POST['submitButton'])){
 											$sql = "SELECT * FROM cart";
 											$result = mysqli_query($conn,$sql)
 											while($row = mysqli_fetch_array($result)){
-												$sql = "INSERT INTO `order`(CustomerID, BookID, DatePurchase, Quantity, TotalPrice, Status) 
-												VALUES(".$row['CustomerID'].", '".$row['BookID']
+												$sql = "INSERT INTO `order`(CustomerID, GameID, DatePurchase, Quantity, TotalPrice, Status) 
+												VALUES(".$row['CustomerID'].", '".$row['GameID']
 												."', CURRENT_TIME, ".$row['Quantity'].", ".$row['TotalPrice'].", 'N')";
 												mysqli_query($conn,$sql)
 											}
@@ -320,7 +320,7 @@ if(isset($_POST['submitButton'])){
 
 	$sql = "SELECT customer.CustomerName, customer.CustomerIC, customer.CustomerGender, customer.CustomerAddress, customer.CustomerEmail, customer.CustomerPhone, book.BookTitle, book.Price, book.Image, `order`.`DatePurchase`, `order`.`Quantity`, `order`.`TotalPrice`
 		FROM customer, book, `order`
-		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`BookID` = book.BookID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$cID."";
+		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`GameID` = book.GameID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$cID."";
 	$result = mysqli_query($conn,$sql)
 
 	echo '<table style="width: 40%">';
@@ -337,7 +337,7 @@ if(isset($_POST['submitButton'])){
 
 	$sql = "SELECT customer.CustomerName, customer.CustomerIC, customer.CustomerGender, customer.CustomerAddress, customer.CustomerEmail, customer.CustomerPhone, book.BookTitle, book.Price, book.Image, `order`.`DatePurchase`, `order`.`Quantity`, `order`.`TotalPrice`
 		FROM customer, book, `order`
-		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`BookID` = book.BookID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$cID."";
+		WHERE `order`.`CustomerID` = customer.CustomerID AND `order`.`GameID` = book.GameID AND `order`.`Status` = 'N' AND `order`.`CustomerID` = ".$cID."";
 	$result = mysqli_query($conn,$sql)
 	$total = 0;
 	while($row = mysqli_fetch_array($result)){
